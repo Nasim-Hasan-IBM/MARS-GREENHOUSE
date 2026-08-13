@@ -72,8 +72,8 @@ The distance between the Earth and Mars is on average 140 million miles (225 mil
 Sense => Analyse => Decide => Act => Report
 
 # Tech Stack:
-**1. Programming Language:** Python Version#:3.13.5
-**2. Artificial Intelligence (AI) Model:** IBM Granite-4-H-Small
-**3. Integrated Development Environment (IDE):** IBM Bob 
+- **1. Programming Language:** Python Version#:3.13.5
+- **2. Artificial Intelligence (AI) Model:** IBM Granite-4-H-Small
+- **3. Integrated Development Environment (IDE):** IBM Bob 
 
 
