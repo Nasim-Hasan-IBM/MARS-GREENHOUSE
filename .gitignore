@@ -16,7 +16,7 @@ vendor/
 *.key
 *.secret
 *.json
-*.text
+*.txt
 
 # ==========================================
 # Build & Compilation Outputs
