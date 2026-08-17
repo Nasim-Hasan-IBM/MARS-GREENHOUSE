@@ -1,0 +1,25 @@
+<!doctype html>
+<meta charset="utf-8" />
+<h1>Python result in the browser</h1>
+<input id="x" type="number" value="5" />
+<button id="run">Run</button>
+<pre id="out">Waiting…</pre>
+
+<script>
+  const out = document.getElementById('out');
+  document.getElementById('run').onclick = async () => {
+    out.textContent = 'Running…';
+    try {
+      const res = await fetch('http://127.0.0.1:5000/api/compute', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ x: Number(document.getElementById('x').value) }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      out.textContent = JSON.stringify(data, null, 2);
+    } catch (err) {
+      out.textContent = 'Error: ' + err.message;
+    }
+  };
+</script>
