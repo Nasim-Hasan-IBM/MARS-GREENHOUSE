@@ -34,21 +34,35 @@ url=os.environ["WATSONX_URL"],
 )
 project_id = os.environ["WATSONX_PROJECT_ID"]
 
-#2-a. Predict Irrigation in MARS
+#2. Init Client + Picking Up a Granite Model for the account
+client = APIClient(credentials=creds, project_id=project_id)
+params = {
+GenParams.MAX_NEW_TOKENS: 300,
+GenParams.TEMPERATURE: 0.2,     # low temp for more factual outputs
+GenParams.TOP_P: 0.9,
+}
+model = ModelInference(
+model_id="ibm/granite-4-h-small",  # or another Granite instruct model you have access to
+params=params,
+credentials=creds,
+project_id=project_id,
+)
+
+#3-a. Predict Irrigation in MARS
 @app.get("/api/irrigation")
 def predict_irrigation():
-    #3. Fetching Information from NASA's InSight MARS API
+    #4. Fetching Information from NASA's InSight MARS API
     resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
     resp.raise_for_status() 
 
-    #4. Storing those Information into the IBM Cloudant
+    #5. Storing those Information into the IBM Cloudant
     # Setting Up Authenticator with the IBm Cloud API Key
     authenticator = IAMAuthenticator(CLOUDANT_API_KEY)
     # Initializing the Cloudant Client with the Service URL 
     client = CloudantV1(authenticator=authenticator)
     client.set_service_url(CLOUDANT_SERVICE_URL)
 
-    #5. Inserting Documents in the Cloudant
+    #6. Inserting Documents in the Cloudant
     try:
         # This Generates an Unique Server-Side Document ID Automatically
         response = client.post_document(
@@ -57,26 +71,13 @@ def predict_irrigation():
             ).get_result()
         print("Success! Document inserted.")
     
-    #6. Capturing the Exceptions
+    #7. Capturing the Exceptions
     except ApiException as ae:
         print(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     
-    #7. Init Client + Picking Up a Granite Model for the account
-    client = APIClient(credentials=creds, project_id=project_id)
-    params = {
-    GenParams.MAX_NEW_TOKENS: 300,
-    GenParams.TEMPERATURE: 0.2,     # low temp for more factual outputs
-    GenParams.TOP_P: 0.9,
-    }
-    model = ModelInference(
-    model_id="ibm/granite-4-h-small",  # or another Granite instruct model you have access to
-    params=params,
-    credentials=creds,
-    project_id=project_id,
-    )
-   
+  
     #8. Prompt: using a JSON and returning
     prompt=f"""
     You are a space scientist. So, could you please analyze the data {resp.json()} and predict the irrigation in Mars?
@@ -85,21 +86,21 @@ def predict_irrigation():
     print(res["results"][0]["generated_text"])
     return res
 
-#2-b. Predict Diseases in MARS
+#3-b. Predict Diseases in MARS
 @app.get("/api/disease")
 def predict_disease():
-    #3. Fetching Information from NASA's InSight MARS API
+    #4. Fetching Information from NASA's InSight MARS API
     resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
     resp.raise_for_status() 
 
-    #4. Storing those Information into the IBM Cloudant
+    #5. Storing those Information into the IBM Cloudant
     # Setting Up Authenticator with the IBm Cloud API Key
     authenticator = IAMAuthenticator(CLOUDANT_API_KEY)
     # Initializing the Cloudant Client with the Service URL 
     client = CloudantV1(authenticator=authenticator)
     client.set_service_url(CLOUDANT_SERVICE_URL)
 
-    #5. Inserting Documents in the Cloudant
+    #6. Inserting Documents in the Cloudant
     try:
         # This Generates an Unique Server-Side Document ID Automatically
         response = client.post_document(
@@ -108,26 +109,12 @@ def predict_disease():
             ).get_result()
         print("Success! Document inserted.")
     
-    #6. Capturing the Exceptions
+    #7. Capturing the Exceptions
     except ApiException as ae:
         print(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     
-    #7. Init Client + Picking Up a Granite Model for the account
-    client = APIClient(credentials=creds, project_id=project_id)
-    params = {
-    GenParams.MAX_NEW_TOKENS: 300,
-    GenParams.TEMPERATURE: 0.2,     # low temp for more factual outputs
-    GenParams.TOP_P: 0.9,
-    }
-    model = ModelInference(
-    model_id="ibm/granite-4-h-small",  # or another Granite instruct model you have access to
-    params=params,
-    credentials=creds,
-    project_id=project_id,
-    )
-   
     #8. Prompt: using a JSON and returning
     prompt=f"""
     You are a space scientist. So, could you please analyze the data {resp.json()} and predict the diseases in Mars?
@@ -136,21 +123,21 @@ def predict_disease():
     print(res["results"][0]["generated_text"])
     return res
 
-#2-c. Predict Energy Optimization in MARS
+#3-c. Predict Energy Optimization in MARS
 @app.get("/api/energy")
 def predict_enery():
-    #3. Fetching Information from NASA's InSight MARS API
+    #4. Fetching Information from NASA's InSight MARS API
     resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
     resp.raise_for_status() 
 
-    #4. Storing those Information into the IBM Cloudant
+    #5. Storing those Information into the IBM Cloudant
     # Setting Up Authenticator with the IBm Cloud API Key
     authenticator = IAMAuthenticator(CLOUDANT_API_KEY)
     # Initializing the Cloudant Client with the Service URL 
     client = CloudantV1(authenticator=authenticator)
     client.set_service_url(CLOUDANT_SERVICE_URL)
 
-    #5. Inserting Documents in the Cloudant
+    #6. Inserting Documents in the Cloudant
     try:
         # This Generates an Unique Server-Side Document ID Automatically
         response = client.post_document(
@@ -159,26 +146,12 @@ def predict_enery():
             ).get_result()
         print("Success! Document inserted.")
     
-    #6. Capturing the Exceptions
+    #7. Capturing the Exceptions
     except ApiException as ae:
         print(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     
-    #7. Init Client + Picking Up a Granite Model for the account
-    client = APIClient(credentials=creds, project_id=project_id)
-    params = {
-    GenParams.MAX_NEW_TOKENS: 300,
-    GenParams.TEMPERATURE: 0.2,     # low temp for more factual outputs
-    GenParams.TOP_P: 0.9,
-    }
-    model = ModelInference(
-    model_id="ibm/granite-4-h-small",  # or another Granite instruct model you have access to
-    params=params,
-    credentials=creds,
-    project_id=project_id,
-    )
-   
     #8. Prompt: using a JSON and returning
     prompt=f"""
     You are a space scientist. So, could you please analyze the data {resp.json()} and predict the energy optimization in Mars?
