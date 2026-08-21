@@ -91,12 +91,8 @@
    document.getElementById('irrigation').onclick = async () => {
        const targetCell = document.getElementById('col1');
         targetCell.querySelector('.content-box').textContent = 'Loading...';
-        try {/*....For Localhost...*/
-            /*const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
-            method: 'GET',
-            headers: {'Accept': 'application/json'}*/
-            /*...For the Deployment Server (Render)....*/
-            const res = await fetch('/api/irrigation', {
+        try {
+            const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
             method: 'GET',
             headers: {'Accept': 'application/json'}
         });
@@ -113,15 +109,11 @@
    document.getElementById('disease').onclick = async () => {
         const targetCell = document.getElementById('col2');
         targetCell.querySelector('.content-box').textContent = 'Loading...';
-        try {/*....For Localhost...*/
-            /*const res = await fetch('http://127.0.0.1:5000/api/disease', {
-            method: 'GET',
-            headers: {'Accept': 'application/json'}*/
-            /*...For the Deployment Server (Render)....*/
-            const res = await fetch('/api/disease', {
+        try {
+            const res = await fetch('http://127.0.0.1:5000/api/disease', {
             method: 'GET',
             headers: {'Accept': 'application/json'}
-        });
+         });
         if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
         //out.textContent = JSON.stringify(data, null, 2);
@@ -136,15 +128,11 @@
     document.getElementById('energy').onclick = async () => {
         const targetCell = document.getElementById('col3');
         targetCell.querySelector('.content-box').textContent = 'Loading...';
-        try {/*....For Localhost...*/
-            /*const res = await fetch('http://127.0.0.1:5000/api/energy', {
-            method: 'GET',
-            headers: {'Accept': 'application/json'}*/
-            /*...For the Deployment Server (Render)....*/
-            const res = await fetch('/api/energy', {
+        try {
+            const res = await fetch('http://127.0.0.1:5000/api/energy', {
             method: 'GET',
             headers: {'Accept': 'application/json'}
-        });
+         });
         if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
         //out.textContent = JSON.stringify(data, null, 2);
