@@ -20,7 +20,7 @@ app = Flask(__name__)
 CORS(app)  # remove or restrict in production
 
 # 1. Load Credentials & Global Variables
-load_dotenv("Secrets.env")
+load_dotenv("./api/Secrets.env")
 NASA_API_KEY = os.environ["NASA_API_KEY"]
 CLOUDANT_API_KEY = os.environ["CLOUDANT_API_KEY"]
 CLOUDANT_SERVICE_URL = os.environ["CLOUDANT_SERVICE_URL"]
