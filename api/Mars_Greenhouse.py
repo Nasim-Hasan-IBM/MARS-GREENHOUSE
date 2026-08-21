@@ -3,7 +3,6 @@
 # pip install ibmcloudant
 # pip install flask flask-cors
 # pip install -U ibm-watsonx-ai python-dotenv
-import json
 import os
 import requests
 from dotenv import load_dotenv
