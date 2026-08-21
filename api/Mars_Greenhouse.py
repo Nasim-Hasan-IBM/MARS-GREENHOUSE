@@ -83,6 +83,7 @@ def predict_irrigation():
     You are a space scientist. So, could you please analyze the data {resp.json()} and predict the irrigation in Mars?
     """
     res = model.generate(prompt=prompt)
+    #print(res)
     print(res["results"][0]["generated_text"])
     return res
 

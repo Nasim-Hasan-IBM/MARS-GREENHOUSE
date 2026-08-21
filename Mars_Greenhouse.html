@@ -49,6 +49,7 @@
       color: #333;
       font-size: 14px;
       line-height: 1.5;
+      text-align:justify
     }
   </style>
 </head>
@@ -88,10 +89,10 @@
   <script>
    //...Function of Irrigation Button...//
    document.getElementById('irrigation').onclick = async () => {
-        const targetCell = document.getElementById('col1');
+       const targetCell = document.getElementById('col1');
         targetCell.querySelector('.content-box').textContent = 'Loading...';
         try {
-        const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
+            const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
             method: 'GET',
             headers: {'Accept': 'application/json'}
         });
@@ -99,7 +100,6 @@
         const data = await res.json();
         //out.textContent = JSON.stringify(data, null, 2);
         targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
-
         } catch (err) {
         targetCell.querySelector('.content-box').textContent = 'Error: ' + err.message;
         }
