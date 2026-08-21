@@ -91,8 +91,12 @@
    document.getElementById('irrigation').onclick = async () => {
        const targetCell = document.getElementById('col1');
         targetCell.querySelector('.content-box').textContent = 'Loading...';
-        try {
-            const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
+        try {/*....For Localhost...*/
+            /*const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
+            method: 'GET',
+            headers: {'Accept': 'application/json'}*/
+            /*...For the Deployment Server (Render)....*/
+            const res = await fetch('https://mars-greenhouse.onrender.com/api/irrigation', {
             method: 'GET',
             headers: {'Accept': 'application/json'}
         });
@@ -109,8 +113,12 @@
    document.getElementById('disease').onclick = async () => {
         const targetCell = document.getElementById('col2');
         targetCell.querySelector('.content-box').textContent = 'Loading...';
-        try {
-        const res = await fetch('http://127.0.0.1:5000/api/disease', {
+        try {/*....For Localhost...*/
+            /*const res = await fetch('http://127.0.0.1:5000/api/disease', {
+            method: 'GET',
+            headers: {'Accept': 'application/json'}*/
+            /*...For the Deployment Server (Render)....*/
+            const res = await fetch('https://mars-greenhouse.onrender.com/api/disease', {
             method: 'GET',
             headers: {'Accept': 'application/json'}
         });
@@ -128,8 +136,12 @@
     document.getElementById('energy').onclick = async () => {
         const targetCell = document.getElementById('col3');
         targetCell.querySelector('.content-box').textContent = 'Loading...';
-        try {
-        const res = await fetch('http://127.0.0.1:5000/api/energy', {
+        try {/*....For Localhost...*/
+            /*const res = await fetch('http://127.0.0.1:5000/api/energy', {
+            method: 'GET',
+            headers: {'Accept': 'application/json'}*/
+            /*...For the Deployment Server (Render)....*/
+            const res = await fetch('https://mars-greenhouse.onrender.com/api/energy', {
             method: 'GET',
             headers: {'Accept': 'application/json'}
         });
