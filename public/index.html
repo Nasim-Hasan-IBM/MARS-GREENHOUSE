@@ -97,9 +97,10 @@
             headers: {'Accept': 'application/json'}
         });
         if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
+        const data = await res.text();
         //out.textContent = JSON.stringify(data, null, 2);
-        targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
+        //targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
+        targetCell.querySelector('.content-box').textContent = data?? 'generated_text not found';
         } catch (err) {
         targetCell.querySelector('.content-box').textContent = 'Error: ' + err.message;
         }
@@ -115,10 +116,10 @@
             headers: {'Accept': 'application/json'}
          });
         if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
+        const data = await res.text();
         //out.textContent = JSON.stringify(data, null, 2);
-        targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
-
+        //targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
+        targetCell.querySelector('.content-box').textContent = data?? 'generated_text not found';
         } catch (err) {
         targetCell.querySelector('.content-box').textContent = 'Error: ' + err.message;
         }
@@ -134,10 +135,10 @@
             headers: {'Accept': 'application/json'}
          });
         if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
+        const data = await res.text();
         //out.textContent = JSON.stringify(data, null, 2);
-        targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
-
+        //targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
+        targetCell.querySelector('.content-box').textContent = data?? 'generated_text not found';
         } catch (err) {
         targetCell.querySelector('.content-box').textContent = 'Error: ' + err.message;
         }
