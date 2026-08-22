@@ -12,9 +12,9 @@ from flask_cors import CORS  # allow cross-origin requests in dev
 from ibmcloudant.cloudant_v1 import CloudantV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_cloud_sdk_core import ApiException
-from ibm_watsonx_ai import Credentials, APIClient
-from ibm_watsonx_ai.foundation_models import ModelInference
-from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
+# from ibm_watsonx_ai import Credentials, APIClient
+# from ibm_watsonx_ai.foundation_models import ModelInference
+# from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
 from openai import OpenAI
 
 app = Flask(__name__)
