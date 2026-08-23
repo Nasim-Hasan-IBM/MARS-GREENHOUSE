@@ -179,7 +179,7 @@
     // If your HTML and Flask API are on the same origin, set API_BASE = "" and use relative paths.
     // If running locally with Flask on 127.0.0.1:5000 and static page on http://localhost:5500, keep the URL below
     // and ensure Flask CORS allows http://localhost:5500.
-    const API_BASE = "http://127.0.0.1:5000"; // e.g., "https://your-api.onrender.com" in production
+    const API_BASE = "http://0.0.0.0:5000"; // e.g., "https://your-api.onrender.com" in production
     // Map buttons to endpoints and output areas
     const actions = [
       { btn: "btn-irrigation", endpoint: "/api/irrigation", out: "out-irrigation" },
