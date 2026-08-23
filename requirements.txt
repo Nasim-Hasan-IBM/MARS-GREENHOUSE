@@ -1,8 +1,8 @@
---upgrade pip
 ibmcloudant
 flask 
 flask-cors
-ibm-watsonx-ai python-dotenv
+ibm-watsonx-ai 
+python-dotenv
 openai
 fastapi
 gunicorn
