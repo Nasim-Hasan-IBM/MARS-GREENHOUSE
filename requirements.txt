@@ -1,5 +1,6 @@
 ibmcloudant
-flask flask-cors
+flask 
+flask-cors
 ibm-watsonx-ai python-dotenv
 openai
 fastapi
