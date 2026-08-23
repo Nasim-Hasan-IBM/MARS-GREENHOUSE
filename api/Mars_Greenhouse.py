@@ -4,6 +4,7 @@
 # pip install flask flask-cors
 # pip install -U ibm-watsonx-ai python-dotenv
 # pip install openai
+# pip install fastapi
 import os
 import requests
 from dotenv import load_dotenv
@@ -16,9 +17,13 @@ from ibm_cloud_sdk_core import ApiException
 # from ibm_watsonx_ai.foundation_models import ModelInference
 # from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
 from openai import OpenAI
+from fastapi import FastAPI
 
-app = Flask(__name__)
-CORS(app)  # remove or restrict in production
+#For Flask App
+#app = Flask(__name__)
+#CORS(app)  # remove or restrict in production
+#For FastAPI
+app = FastAPI()
 
 # 1. Load Credentials & Global Variables
 load_dotenv("./api/Secrets.env")
@@ -188,6 +193,7 @@ def predict_enery():
     print(res.output_text)
     #print(res["results"][0]["generated_text"])
     return res.output_text
-    
-if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+
+# For Flask App Running Point 
+#if __name__ == "__main__":
+    #app.run(host="127.0.0.1", port=5000, debug=True)

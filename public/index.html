@@ -92,7 +92,10 @@
        const targetCell = document.getElementById('col1');
         targetCell.querySelector('.content-box').textContent = 'Loading...';
         try {
-            const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
+            /*For Flask App*/
+            //const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
+            /*For FastAPI*/
+            const res = await fetch('/api/irrigation', {
             method: 'GET',
             headers: {'Accept': 'application/json'}
         });
@@ -111,7 +114,10 @@
         const targetCell = document.getElementById('col2');
         targetCell.querySelector('.content-box').textContent = 'Loading...';
         try {
-            const res = await fetch('http://127.0.0.1:5000/api/disease', {
+            /*For Flask App*/
+            //const res = await fetch('http://127.0.0.1:5000/api/disease', {
+            /*For FastAPI*/
+            const res = await fetch('/api/disease', {
             method: 'GET',
             headers: {'Accept': 'application/json'}
          });
@@ -130,7 +136,10 @@
         const targetCell = document.getElementById('col3');
         targetCell.querySelector('.content-box').textContent = 'Loading...';
         try {
-            const res = await fetch('http://127.0.0.1:5000/api/energy', {
+            /* For Flask app*/
+            //const res = await fetch('http://127.0.0.1:5000/api/energy', {
+            /* For FastAPI*/
+            const res = await fetch('/api/energy', {
             method: 'GET',
             headers: {'Accept': 'application/json'}
          });
