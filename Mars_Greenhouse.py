@@ -18,12 +18,24 @@ from ibm_cloud_sdk_core import ApiException
 # from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
 from openai import OpenAI
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 #For Flask App
 #app = Flask(__name__)
 #CORS(app)  # remove or restrict in production
 #For FastAPI
 app = FastAPI()
+
+ALLOWED_ORIGINS = ["https://mars-greenhouse.onrender.com/"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,        # set True only if you use cookies
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
+    max_age=86400,                 # cache preflight 1 day
+)
 
 # 1. Load Credentials & Global Variables
 load_dotenv("Secrets.env")
