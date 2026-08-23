@@ -30,7 +30,7 @@ ALLOWED_ORIGINS = ["https://mars-greenhouse.onrender.com",
 "http://127.0.0.1:5000","http://localhost:5500","http://localhost:8000"]
 
 CORS(
-    #app,
+    app,
     resources={r"/api/*": {"origins": ALLOWED_ORIGINS}},
     supports_credentials=True, # only if you use cookies
     methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
