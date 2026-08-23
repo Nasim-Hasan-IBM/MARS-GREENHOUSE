@@ -26,7 +26,7 @@ app = Flask(__name__)
 #For FastAPI
 #app = FastAPI()
 
-ALLOWED_ORIGINS = ["https://mars-greenhouse.onrender.com",
+ALLOWED_ORIGINS = ["https://wm47pRKZsHA.onrender.com",
 "http://127.0.0.1","http://localhost"]
 
 CORS(
