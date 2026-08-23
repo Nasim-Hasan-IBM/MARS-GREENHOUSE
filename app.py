@@ -5,7 +5,7 @@
 # pip install -U ibm-watsonx-ai python-dotenv
 # pip install openai
 # pip install fastapi
-# pip install uvicorn[standard]
+# pip install gunicorn
 import os
 import requests
 from dotenv import load_dotenv
@@ -26,7 +26,7 @@ from openai import OpenAI
 #For FastAPI
 #app = FastAPI()
 
-ALLOWED_ORIGINS = ["https://mars-greenhouse.onrender.com",
+ALLOWED_ORIGINS = ["https://onrender.com",
 "http://127.0.0.1","http://localhost"]
 
 CORS(
@@ -39,7 +39,7 @@ CORS(
 )
 
 # 1. Load Credentials & Global Variables
-load_dotenv("./api/Secrets.env")
+load_dotenv("Secrets.env")
 NASA_API_KEY = os.environ["NASA_API_KEY"]
 CLOUDANT_API_KEY = os.environ["CLOUDANT_API_KEY"]
 CLOUDANT_SERVICE_URL = os.environ["CLOUDANT_SERVICE_URL"]
