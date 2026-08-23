@@ -22,15 +22,15 @@ from openai import OpenAI
 #from fastapi.middleware.cors import CORSMiddleware
 
 #For Flask App
-app = Flask(__name__)
+#app = Flask(__name__)
 #For FastAPI
 #app = FastAPI()
 
-ALLOWED_ORIGINS = ["https://wm47pRKZsHA.onrender.com",
+ALLOWED_ORIGINS = ["https://mars-greenhouse.onrender.com",
 "http://127.0.0.1","http://localhost"]
 
 CORS(
-    app,
+    #app,
     resources={r"/api/*": {"origins": ALLOWED_ORIGINS}},
     supports_credentials=True, # only if you use cookies
     methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -208,5 +208,5 @@ def predict_enery():
     return res.output_text
 
 # For Flask App Running Point 
-if __name__ == "__main__":
-  app.run(host="127.0.0.1", port=5000, debug=True)
+#if __name__ == "__main__":
+  #app.run(host="127.0.0.1", port=5000, debug=True)
