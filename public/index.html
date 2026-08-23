@@ -1,160 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Mars Greenhouse System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
+    :root{
+      --bg:#0b0f16;         /* deep space */
+      --panel:#121826;      /* card bg */
+      --accent:#ff6b00;     /* warm accent */
+      --accent-2:#0ea5e9;   /* cool accent */
+      --text:#e6edf3;       /* primary text */
+      --muted:#9fb0c0;      /* muted text */
+      --border:#1f2a3a;
+      --success:#22c55e;
+      --error:#f43f5e;
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";}
+
+    /* Hero */
+    .hero{
+      position:relative;
+      background:url("https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg") center/cover no-repeat;
+      min-height:38vh;
+      display:flex;align-items:center;justify-content:center;
+      text-align:center; padding:48px 16px;
+    }
+    .hero::after{
+      content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,15,22,.35),rgba(11,15,22,.85));
+    }
+    .hero .inner{position:relative;z-index:1;max-width:900px}
+    .title{font-size:clamp(28px,4vw,44px);margin:0 0 10px;font-weight:800;letter-spacing:.3px}
+    .subtitle{color:var(--muted);font-size:clamp(14px,2.2vw,18px);margin:0 auto;max-width:800px}
+
+    /* Layout */
+    .wrap{max-width:1100px;margin:-32px auto 40px;padding:0 16px}
+    .grid{
+      display:grid;gap:16px;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+    @media (max-width:900px){ .grid{grid-template-columns:1fr 1fr} }
+    @media (max-width:640px){ .grid{grid-template-columns:1fr} }
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(18,24,38,.9),rgba(18,24,38,.95));
+      border:1px solid var(--border);border-radius:14px;overflow:hidden;
+      display:flex;flex-direction:column;min-height:260px;
+    }
+    .card-head{
+      display:flex;align-items:center;gap:10px;
+      padding:14px 16px;border-bottom:1px solid var(--border);
+      background:linear-gradient(90deg,rgba(255,107,0,.08),rgba(14,165,233,.06));
+    }
+    .badge{
+      font-size:12px;color:#fff;background:rgba(255,107,0,.22);border:1px solid rgba(255,107,0,.4);
+      padding:2px 8px;border-radius:999px
+    }
+    .card-body{padding:14px 16px;display:flex;flex-direction:column;gap:12px;flex:1}
+    .thumb{
+      width:100%;height:120px;border-radius:10px;object-fit:cover;border:1px solid var(--border)
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      table-layout: fixed;
+    /* Buttons */
+    .btn{
+      align-self:flex-start;
+      background:linear-gradient(90deg,var(--accent),#ff914d);
+      color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;
+      cursor:pointer;transition:transform .06s ease,filter .15s ease;
     }
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+    .btn:disabled{cursor:wait;filter:grayscale(.3) brightness(.85)}
 
-    th, td {
-      border: 1px solid #ddd;
-      padding: 12px;
-      text-align: center;
-      vertical-align: top;
+    /* Output box */
+    .out{
+      min-height:52px;background:#0d1320;border:1px solid var(--border);border-radius:10px;
+      padding:10px 12px;color:var(--text);font-size:14px;line-height:1.45;text-align:justify;white-space:pre-wrap
     }
+    .muted{color:var(--muted)}
+    .ok{color:var(--success)}
+    .err{color:var(--error)}
 
-    th {
-      background-color: #f4f4f9;
+    /* Spinner inline */
+    .spinner{
+      width:16px;height:16px;border:2px solid rgba(255,255,255,.25);
+      border-top-color:#fff;border-radius:50%;display:inline-block;animation:spin .8s linear infinite;vertical-align:-3px;margin-right:8px
     }
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* Style for the header buttons */
-    .header-btn {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      font-size: 14px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
+    /* Gallery */
+    .gallery{margin:28px 0 10px}
+    .gallery h3{margin:0 0 10px}
+    .ggrid{display:grid;gap:12px;grid-template-columns:repeat(6,1fr)}
+    @media (max-width:900px){ .ggrid{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:640px){ .ggrid{grid-template-columns:repeat(2,1fr)} }
+    .ggrid img{width:100%;height:110px;object-fit:cover;border-radius:10px;border:1px solid var(--border)}
 
-    .header-btn:hover {
-      background-color: #0056b3;
-    }
-
-    /* Styling for the revealed text */
-    .content-box {
-      min-height: 40px;
-      color: #333;
-      font-size: 14px;
-      line-height: 1.5;
-      text-align:justify
-    }
+    footer{max-width:1100px;margin:16px auto 40px;padding:0 16px;color:var(--muted);font-size:13px}
+    a{color:var(--accent-2);text-decoration:none}
+    a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
 
-  <h2 style="text-align:center;">Mars Greenhouse System</h2>
+  <!-- Hero -->
+  <header class="hero" role="banner" aria-label="Mars banner">
+    <div class="inner">
+      <h1 class="title">Mars Greenhouse System</h1>
+      <p class="subtitle">Operate irrigation, disease detection, and energy optimization workflows backed by a Python/Flask AI service. Click a module below to fetch live insights.</p>
+    </div>
+  </header>
 
-  <table>
-    <thead>
-      <tr>
-        <th>
-          <button id="irrigation" class="header-btn">
-            Irrigation
-          </button>
-        </th>
-        <th>
-          <button id="disease" class="header-btn">
-            Disease Detection
-          </button>
-        </th>
-        <th>
-          <button id="energy" class="header-btn">
-            Energy Optimization
-          </button>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td id="col1"><div class="content-box"></div></td>
-        <td id="col2"><div class="content-box"></div></td>
-        <td id="col3"><div class="content-box"></div></td>
-      </tr>
-    </tbody>
-  </table>
-  
+  <main class="wrap">
+    <!-- Action Cards -->
+    <section class="grid" aria-label="Control modules">
+      <!-- Irrigation -->
+      <article class="card" id="card-irrigation">
+        <div class="card-head">
+          <span class="badge">Irrigation</span>
+          <strong>Soil moisture and scheduling</strong>
+        </div>
+        <div class="card-body">
+          <img class="thumb" src="https://upload.wikimedia.org/wikipedia/commons/5/56/Mars_Hubble.jpg" alt="Mars surface and atmosphere" />
+          <button class="btn" id="btn-irrigation">Run Irrigation Analysis</button>
+          <div class="out" id="out-irrigation"><span class="muted">Waiting for request…</span></div>
+        </div>
+      </article>
+
+      <!-- Disease Detection -->
+      <article class="card" id="card-disease">
+        <div class="card-head">
+          <span class="badge">Disease</span>
+          <strong>Leaf health and anomaly checks</strong>
+        </div>
+        <div class="card-body">
+          <img class="thumb" src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Mangalyaan_Mars_Image_2014-10-10.jpg" alt="Mars landscape captured by spacecraft" />
+          <button class="btn" id="btn-disease">Run Disease Detection</button>
+          <div class="out" id="out-disease"><span class="muted">Waiting for request…</span></div>
+        </div>
+      </article>
+
+      <!-- Energy Optimization -->
+      <article class="card" id="card-energy">
+        <div class="card-head">
+          <span class="badge">Energy</span>
+          <strong>Power usage optimization</strong>
+        </div>
+        <div class="card-body">
+          <img class="thumb" src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Mars_atmosphere.jpg" alt="Mars horizon with thin atmosphere" />
+          <button class="btn" id="btn-energy">Run Energy Optimization</button>
+          <div class="out" id="out-energy"><span class="muted">Waiting for request…</span></div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Mars Gallery -->
+    <section class="gallery" aria-label="Mars gallery">
+      <h3>Explore Mars 📷</h3>
+      <div class="ggrid">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg" alt="True-color global Mars" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/Mars_Hubble.jpg" alt="Hubble image of Mars" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Mangalyaan_Mars_Image_2014-10-10.jpg" alt="Mangalyaan image of Mars" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Mars_atmosphere.jpg" alt="Mars atmosphere edge" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Mars_Valles_Marineris.jpeg" alt="Valles Marineris canyon system" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Olympus_Mons_alt.jpg" alt="Olympus Mons volcano" />
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Images are public domain or permissively licensed via Wikimedia Commons. Credits: NASA/JPL-Caltech, ISRO/ISSDC, ESA. For offline use, download and place images in an <code>assets/</code> folder and update the <code>src</code> paths.
+  </footer>
+
   <script>
-   //...Function of Irrigation Button...//
-   document.getElementById('irrigation').onclick = async () => {
-       const targetCell = document.getElementById('col1');
-        targetCell.querySelector('.content-box').textContent = 'Loading...';
-        try {
-            /*For Flask App*/
-            const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
-            /*For FastAPI*/
-            //const res = await fetch('/api/irrigation', {
-            method: 'GET',
-            headers: {'Accept': 'application/json'}
+    // =============================
+    // CONFIG
+    // =============================
+    // If your HTML and Flask API are on the same origin, set API_BASE = "" and use relative paths.
+    // If running locally with Flask on 127.0.0.1:5000 and static page on http://localhost:5500, keep the URL below
+    // and ensure Flask CORS allows http://localhost:5500.
+    const API_BASE = "http://127.0.0.1:5000"; // e.g., "https://your-api.onrender.com" in production
+
+    // Map buttons to endpoints and output areas
+    const actions = [
+      { btn: "btn-irrigation", endpoint: "/api/irrigation", out: "out-irrigation" },
+      { btn: "btn-disease",   endpoint: "/api/disease",   out: "out-disease"   },
+      { btn: "btn-energy",    endpoint: "/api/energy",    out: "out-energy"    },
+    ];
+
+    // =============================
+    // UTIL: robust API caller
+    // - Adds spinner/disabled state
+    // - Handles JSON or text
+    // - Displays helpful errors
+    // =============================
+    async function callApi(buttonId, endpoint, outId){
+      const btn = document.getElementById(buttonId);
+      const box = document.getElementById(outId);
+
+      // set loading state
+      btn.disabled = true;
+      const original = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>Working…';
+      box.textContent = "Loading…";
+
+      try{
+        const url = `${API_BASE}${endpoint}`;
+        const res = await fetch(url, {
+          method: "GET",
+          headers: { "Accept": "application/json, text/plain;q=0.9" },
+          // credentials: "include", // enable only if you use cookies + CORS allow-credentials
         });
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.text();
-        //out.textContent = JSON.stringify(data, null, 2);
-        //targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
-        targetCell.querySelector('.content-box').textContent = data?? 'generated_text not found';
-        } catch (err) {
-        targetCell.querySelector('.content-box').textContent = 'Error: ' + err.message;
-        }
-  };
 
-   //...Function of Disease Detection Button...//
-   document.getElementById('disease').onclick = async () => {
-        const targetCell = document.getElementById('col2');
-        targetCell.querySelector('.content-box').textContent = 'Loading...';
-        try {
-            /*For Flask App*/
-            const res = await fetch('http://127.0.0.1:5000/api/disease', {
-            /*For FastAPI*/
-            //const res = await fetch('/api/disease', {
-            method: 'GET',
-            headers: {'Accept': 'application/json'}
-         });
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.text();
-        //out.textContent = JSON.stringify(data, null, 2);
-        //targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
-        targetCell.querySelector('.content-box').textContent = data?? 'generated_text not found';
-        } catch (err) {
-        targetCell.querySelector('.content-box').textContent = 'Error: ' + err.message;
+        if(!res.ok){
+          // attempt to extract error body
+          let errText = "";
+          try{ errText = await res.text(); } catch(_){}
+          throw new Error(`HTTP ${res.status} ${res.statusText}${errText ? " — " + errText : ""}`);
         }
-  };
-   
-    //...Function of Energy Optimization Button...//
-    document.getElementById('energy').onclick = async () => {
-        const targetCell = document.getElementById('col3');
-        targetCell.querySelector('.content-box').textContent = 'Loading...';
-        try {
-            /* For Flask app*/
-            const res = await fetch('http://127.0.0.1:5000/api/energy', {
-           /* For FastAPI*/
-           //const res = await fetch('/api/energy', {
-            method: 'GET',
-            headers: {'Accept': 'application/json'}
-         });
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.text();
-        //out.textContent = JSON.stringify(data, null, 2);
-        //targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
-        targetCell.querySelector('.content-box').textContent = data?? 'generated_text not found';
-        } catch (err) {
-        targetCell.querySelector('.content-box').textContent = 'Error: ' + err.message;
+
+        // prefer JSON, fallback to text
+        let output;
+        const ct = res.headers.get("content-type") || "";
+        if(ct.includes("application/json")){
+          const data = await res.json();
+          // Show whole response, but pluck a common field if present
+          const pretty = JSON.stringify(data, null, 2);
+          output = data?.results?.[0]?.generated_text ?? data?.message ?? pretty;
+        } else {
+          output = await res.text();
         }
-  };
-    
+
+        box.innerHTML = `<span class="ok">✓</span> ${escapeHtml(output)}`;
+      }catch(err){
+        // Common causes: CORS, mixed content (HTTPS page → HTTP API), API down
+        box.innerHTML = `<span class="err">✗</span> ${escapeHtml(err.message)}\n` +
+                        `\nTip: If this page is HTTPS or hosted remotely, set API_BASE to your deployed HTTPS API URL and enable CORS for this origin.`;
+      }finally{
+        btn.disabled = false;
+        btn.innerHTML = original;
+      }
+    }
+
+    // Simple HTML escaper to avoid injecting raw response
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"'`=\/]/g, s => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;","/":"&#47;","`":"&#96;","=":"&#61;"
+      }[s]));
+    }
+
+    // Wire up buttons
+    actions.forEach(a => {
+      document.getElementById(a.btn).addEventListener("click", () => callApi(a.btn, a.endpoint, a.out));
+    });
   </script>
-
 </body>
 </html>
-
