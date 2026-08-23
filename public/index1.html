@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mars Greenhouse System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      table-layout: fixed;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f4f4f9;
+    }
+
+    /* Style for the header buttons */
+    .header-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .header-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Styling for the revealed text */
+    .content-box {
+      min-height: 40px;
+      color: #333;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align:justify
+    }
+  </style>
+</head>
+<body>
+
+  <h2 style="text-align:center;">Mars Greenhouse System</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <button id="irrigation" class="header-btn">
+            Irrigation
+          </button>
+        </th>
+        <th>
+          <button id="disease" class="header-btn">
+            Disease Detection
+          </button>
+        </th>
+        <th>
+          <button id="energy" class="header-btn">
+            Energy Optimization
+          </button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="col1"><div class="content-box"></div></td>
+        <td id="col2"><div class="content-box"></div></td>
+        <td id="col3"><div class="content-box"></div></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <script>
+   //...Function of Irrigation Button...//
+   document.getElementById('irrigation').onclick = async () => {
+       const targetCell = document.getElementById('col1');
+        targetCell.querySelector('.content-box').textContent = 'Loading...';
+        try {
+            /*For Flask App*/
+            const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
+            /*For FastAPI*/
+            //const res = await fetch('/api/irrigation', {
+            method: 'GET',
+            headers: {'Accept': 'application/json'}
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.text();
+        //out.textContent = JSON.stringify(data, null, 2);
+        //targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
+        targetCell.querySelector('.content-box').textContent = data?? 'generated_text not found';
+        } catch (err) {
+        targetCell.querySelector('.content-box').textContent = 'Error: ' + err.message;
+        }
+  };
+
+   //...Function of Disease Detection Button...//
+   document.getElementById('disease').onclick = async () => {
+        const targetCell = document.getElementById('col2');
+        targetCell.querySelector('.content-box').textContent = 'Loading...';
+        try {
+            /*For Flask App*/
+            const res = await fetch('http://127.0.0.1:5000/api/disease', {
+            /*For FastAPI*/
+            //const res = await fetch('/api/disease', {
+            method: 'GET',
+            headers: {'Accept': 'application/json'}
+         });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.text();
+        //out.textContent = JSON.stringify(data, null, 2);
+        //targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
+        targetCell.querySelector('.content-box').textContent = data?? 'generated_text not found';
+        } catch (err) {
+        targetCell.querySelector('.content-box').textContent = 'Error: ' + err.message;
+        }
+  };
+   
+    //...Function of Energy Optimization Button...//
+    document.getElementById('energy').onclick = async () => {
+        const targetCell = document.getElementById('col3');
+        targetCell.querySelector('.content-box').textContent = 'Loading...';
+        try {
+            /* For Flask app*/
+            const res = await fetch('http://127.0.0.1:5000/api/energy', {
+           /* For FastAPI*/
+           //const res = await fetch('/api/energy', {
+            method: 'GET',
+            headers: {'Accept': 'application/json'}
+         });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.text();
+        //out.textContent = JSON.stringify(data, null, 2);
+        //targetCell.querySelector('.content-box').textContent = data?.results?.[0]?.generated_text ?? 'generated_text not found';
+        targetCell.querySelector('.content-box').textContent = data?? 'generated_text not found';
+        } catch (err) {
+        targetCell.querySelector('.content-box').textContent = 'Error: ' + err.message;
+        }
+  };
+    
+  </script>
+
+</body>
+</html>
+
