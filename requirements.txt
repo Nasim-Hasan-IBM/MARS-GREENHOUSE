@@ -1,0 +1,7 @@
+-U ibm-watsonx-ai python-dotenv
+ibmcloudant
+flask flask-cors
+-U ibm-watsonx-ai python-dotenv
+openai
+fastapi
+gunicorn
