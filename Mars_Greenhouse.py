@@ -26,15 +26,16 @@ from fastapi.middleware.cors import CORSMiddleware
 #For FastAPI
 app = FastAPI()
 
-ALLOWED_ORIGINS = ["https://mars-greenhouse.onrender.com/"]
+ALLOWED_ORIGINS = ["https://mars-greenhouse.onrender.com/",
+"http://127.0.0.1:5500"]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,        # set True only if you use cookies
+    allow_credentials=True, # set True only if you use cookies
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type"],
-    max_age=86400,                 # cache preflight 1 day
+    allow_headers=["*"],
+    max_age=86400, # cache preflight 1 day
 )
 
 # 1. Load Credentials & Global Variables
