@@ -30,7 +30,7 @@ ALLOWED_ORIGINS = ["https://onrender.com",
 "http://127.0.0.1","http://localhost","http://0.0.0.0"]
 
 CORS(
-    #app,
+    app,
     resources={r"/api/*": {"origins": ALLOWED_ORIGINS}},
     supports_credentials=True, # only if you use cookies
     methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -209,4 +209,4 @@ def predict_enery():
 
 # For Flask App Running Point 
 if __name__ == "__main__":
-  app.run(host="0.0.0.0", port=5000, debug=True)
+  app.run(host="127.0.0.1", port=5000, debug=True)
