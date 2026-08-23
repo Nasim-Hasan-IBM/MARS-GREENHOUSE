@@ -22,22 +22,21 @@ from openai import OpenAI
 #from fastapi.middleware.cors import CORSMiddleware
 
 #For Flask App
-app = Flask(__name__)
-#CORS(app)  # remove or restrict in production
+#app = Flask(__name__)
 #For FastAPI
 #app = FastAPI()
 
-# ALLOWED_ORIGINS = ["https://mars-greenhouse.onrender.com/",
-# "http://127.0.0.1:5500"]
+ALLOWED_ORIGINS = ["https://mars-greenhouse.onrender.com",
+"http://127.0.0.1:5500","http://localhost:5500","http://localhost:8000"]
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=ALLOWED_ORIGINS,
-#     allow_credentials=True, # set True only if you use cookies
-#     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-#     allow_headers=["*"],
-#     max_age=86400, # cache preflight 1 day
-# )
+CORS(
+    #app,
+    resources={r"/api/*": {"origins": ALLOWED_ORIGINS}},
+    supports_credentials=True, # only if you use cookies
+    methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    #allow_headers=["Content-Type", "Authorization"],
+    max_age=86400
+)
 
 # 1. Load Credentials & Global Variables
 load_dotenv("./api/Secrets.env")
@@ -209,5 +208,5 @@ def predict_enery():
     return res.output_text
 
 # For Flask App Running Point 
-if __name__ == "__main__":
-  app.run(host="127.0.0.1", port=5000, debug=True)
+#if __name__ == "__main__":
+  #app.run(host="127.0.0.1", port=5500, debug=True)

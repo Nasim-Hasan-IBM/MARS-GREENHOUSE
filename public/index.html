@@ -93,11 +93,12 @@
         targetCell.querySelector('.content-box').textContent = 'Loading...';
         try {
             /*For Flask App*/
-            const res = await fetch('http://127.0.0.1:5000/api/irrigation', {
+            //const res = await fetch('http://127.0.0.1:5500/api/irrigation', {
+            const res = await fetch('https://mars-greenhouse.onrender.com/api/irrigation', {
             /*For FastAPI*/
             //const res = await fetch('/api/irrigation', {
             method: 'GET',
-            headers: {'Accept': 'application/json'}
+            //headers: {'Accept': 'application/json'}
         });
         if (!res.ok) throw new Error(await res.text());
         const data = await res.text();
@@ -115,11 +116,12 @@
         targetCell.querySelector('.content-box').textContent = 'Loading...';
         try {
             /*For Flask App*/
-            const res = await fetch('http://127.0.0.1:5000/api/disease', {
+            //const res = await fetch('http://127.0.0.1:5500/api/disease', {
+            const res = await fetch('https://mars-greenhouse.onrender.com/api/disease', {
             /*For FastAPI*/
             //const res = await fetch('/api/disease', {
             method: 'GET',
-            headers: {'Accept': 'application/json'}
+            //headers: {'Accept': 'application/json'}
          });
         if (!res.ok) throw new Error(await res.text());
         const data = await res.text();
@@ -137,11 +139,12 @@
         targetCell.querySelector('.content-box').textContent = 'Loading...';
         try {
             /* For Flask app*/
-            const res = await fetch('http://127.0.0.1:5000/api/energy', {
+           // const res = await fetch('http://127.0.0.1:5500/api/energy', {
+            const res = await fetch('https://mars-greenhouse.onrender.com/api/energy', {
             /* For FastAPI*/
             //const res = await fetch('/api/energy', {
             method: 'GET',
-            headers: {'Accept': 'application/json'}
+            //headers: {'Accept': 'application/json'}
          });
         if (!res.ok) throw new Error(await res.text());
         const data = await res.text();
