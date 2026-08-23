@@ -27,7 +27,7 @@ app = Flask(__name__)
 #app = FastAPI()
 
 ALLOWED_ORIGINS = ["https://mars-greenhouse.onrender.com",
-"http://127.0.0.1:5500","http://localhost:5500","http://localhost:8000"]
+"http://127.0.0.1","http://localhost"]
 
 CORS(
     app,
@@ -209,4 +209,4 @@ def predict_enery():
 
 # For Flask App Running Point 
 if __name__ == "__main__":
-  app.run(host="127.0.0.1", port=5500, debug=True)
+  app.run(host="127.0.0.1", port=5000, debug=True)
