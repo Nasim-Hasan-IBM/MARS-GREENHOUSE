@@ -34,7 +34,7 @@ CORS(
     resources={r"/api/*": {"origins": ALLOWED_ORIGINS}},
     supports_credentials=True, # only if you use cookies
     methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    #allow_headers=["Content-Type", "Authorization"],
+    allow_headers=["Content-Type", "Authorization","Accept"],
     max_age=86400
 )
 
