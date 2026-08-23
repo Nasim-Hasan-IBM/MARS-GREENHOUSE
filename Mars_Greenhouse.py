@@ -22,7 +22,7 @@ from openai import OpenAI
 # from fastapi.middleware.cors import CORSMiddleware
 
 #For Flask App
-#app = Flask(__name__)
+app = Flask(__name__)
 #For FastAPI
 #app = FastAPI()
 
@@ -208,5 +208,5 @@ def predict_enery():
     return res.output_text
 
 # For Flask App Running Point 
-#if __name__ == "__main__":
- #app.run(host="127.0.0.1", port=5500, debug=True)
+if __name__ == "__main__":
+ app.run(host="127.0.0.1", port=5500, debug=True)
