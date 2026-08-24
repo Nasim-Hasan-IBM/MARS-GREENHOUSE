@@ -1,11 +1,3 @@
-# Install
-# pip install -U ibm-watsonx-ai python-dotenv
-# pip install ibmcloudant
-# pip install flask flask-cors
-# pip install -U ibm-watsonx-ai python-dotenv
-# pip install openai
-# pip install fastapi
-# pip install gunicorn
 import os
 import requests
 from dotenv import load_dotenv
