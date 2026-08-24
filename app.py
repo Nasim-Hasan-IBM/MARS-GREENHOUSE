@@ -66,7 +66,7 @@ openaiclient = OpenAI()
 #3. Handling the Home/Base (/) Requests 
 @app.route('/')
 def home():
-    return render_template('/public/index.html')
+    return render_template('index.html')
 
 #4-a. Predict Irrigation in MARS
 @app.get("/api/irrigation")
