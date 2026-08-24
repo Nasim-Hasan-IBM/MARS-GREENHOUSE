@@ -1,7 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
-from flask import Flask, jsonify, render_template_string, request
+from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS  # allow cross-origin requests in dev
 from ibmcloudant.cloudant_v1 import CloudantV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -19,7 +19,7 @@ app = Flask(__name__)
 #app = FastAPI()
 
 ALLOWED_ORIGINS = ["https://onrender.com",
-"http://127.0.0.1","http://localhost","http://0.0.0.0"]
+"http://127.0.0.1","http://localhost","http://0.0.0.0","/"]
 
 CORS(
     app,
@@ -63,21 +63,26 @@ CLOUDANT_DB = os.environ["CLOUDANT_DB"]
 #Connection Process for the OpenAI (GPT-5) Model
 openaiclient = OpenAI()
 
-#3-a. Predict Irrigation in MARS
+#3. Handling the Home/Base (/) Requests 
+@app.route('/')
+def home():
+    return render_template('/public/index.html')
+
+#4-a. Predict Irrigation in MARS
 @app.get("/api/irrigation")
 def predict_irrigation():
-    #4. Fetching Information from NASA's InSight MARS API
+    #5. Fetching Information from NASA's InSight MARS API
     resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
     resp.raise_for_status() 
 
-    #5. Storing those Information into the IBM Cloudant
+    #6. Storing those Information into the IBM Cloudant
     # Setting Up Authenticator with the IBm Cloud API Key
     authenticator = IAMAuthenticator(CLOUDANT_API_KEY)
     # Initializing the Cloudant Client with the Service URL 
     client = CloudantV1(authenticator=authenticator)
     client.set_service_url(CLOUDANT_SERVICE_URL)
 
-    #6. Inserting Documents in the Cloudant
+    #7. Inserting Documents in the Cloudant
     try:
         # This Generates an Unique Server-Side Document ID Automatically
         response = client.post_document(
@@ -86,14 +91,14 @@ def predict_irrigation():
             ).get_result()
         print("Success! Document inserted.")
     
-    #7. Capturing the Exceptions
+    #8. Capturing the Exceptions
     except ApiException as ae:
         print(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     
   
-    #8. Prompt: using a JSON and returning
+    #9. Prompt: using a JSON and returning
     prompt=f"""
     You are a space scientist. So, could you please analyze the data {resp.json()} and predict the irrigation in Mars?
     """
@@ -109,21 +114,21 @@ def predict_irrigation():
     #print(res["results"][0]["generated_text"])
     return res.output_text
 
-#3-b. Predict Diseases in MARS
+#4-b. Predict Diseases in MARS
 @app.get("/api/disease")
 def predict_disease():
-    #4. Fetching Information from NASA's InSight MARS API
+    #5. Fetching Information from NASA's InSight MARS API
     resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
     resp.raise_for_status() 
 
-    #5. Storing those Information into the IBM Cloudant
+    #6. Storing those Information into the IBM Cloudant
     # Setting Up Authenticator with the IBm Cloud API Key
     authenticator = IAMAuthenticator(CLOUDANT_API_KEY)
     # Initializing the Cloudant Client with the Service URL 
     client = CloudantV1(authenticator=authenticator)
     client.set_service_url(CLOUDANT_SERVICE_URL)
 
-    #6. Inserting Documents in the Cloudant
+    #7. Inserting Documents in the Cloudant
     try:
         # This Generates an Unique Server-Side Document ID Automatically
         response = client.post_document(
@@ -132,13 +137,13 @@ def predict_disease():
             ).get_result()
         print("Success! Document inserted.")
     
-    #7. Capturing the Exceptions
+    #8. Capturing the Exceptions
     except ApiException as ae:
         print(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     
-    #8. Prompt: using a JSON and returning
+    #9. Prompt: using a JSON and returning
     prompt=f"""
     You are a space scientist. So, could you please analyze the data {resp.json()} and predict the diseases in Mars?
     """
@@ -154,21 +159,21 @@ def predict_disease():
     #print(res["results"][0]["generated_text"])
     return res.output_text
 
-#3-c. Predict Energy Optimization in MARS
+#4-c. Predict Energy Optimization in MARS
 @app.get("/api/energy")
 def predict_enery():
-    #4. Fetching Information from NASA's InSight MARS API
+    #5. Fetching Information from NASA's InSight MARS API
     resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
     resp.raise_for_status() 
 
-    #5. Storing those Information into the IBM Cloudant
+    #6. Storing those Information into the IBM Cloudant
     # Setting Up Authenticator with the IBm Cloud API Key
     authenticator = IAMAuthenticator(CLOUDANT_API_KEY)
     # Initializing the Cloudant Client with the Service URL 
     client = CloudantV1(authenticator=authenticator)
     client.set_service_url(CLOUDANT_SERVICE_URL)
 
-    #6. Inserting Documents in the Cloudant
+    #7. Inserting Documents in the Cloudant
     try:
         # This Generates an Unique Server-Side Document ID Automatically
         response = client.post_document(
@@ -177,13 +182,13 @@ def predict_enery():
             ).get_result()
         print("Success! Document inserted.")
     
-    #7. Capturing the Exceptions
+    #8. Capturing the Exceptions
     except ApiException as ae:
         print(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     
-    #8. Prompt: using a JSON and returning
+    #9. Prompt: using a JSON and returning
     prompt=f"""
     You are a space scientist. So, could you please analyze the data {resp.json()} and predict the energy optimization in Mars?
     """
@@ -201,4 +206,4 @@ def predict_enery():
 
 # For Flask App Running Point 
 if __name__ == "__main__":
-  app.run(host="127.0.0.1", port=5000, debug=True)
+  app.run(host="0.0.0.0", port=5000, debug=True)
