@@ -68,12 +68,43 @@ openaiclient = OpenAI()
 def home():
     return render_template('index.html')
 
+def extract_mars_weather(raw_json):
+    try:
+        # Get the first available Sol ID (e.g., "675")
+        sol_keys = [key for key in raw_json.keys() if key.isdigit()]
+        if not sol_keys:
+            return "No valid Sol weather data found."
+            
+        latest_sol = sol_keys[0]
+        sol_data = raw_json[latest_sol]
+        
+        # Flattening out the metrics safely with fallbacks (.get)
+        # AT = Atmospheric Temperature, HWS = Horizontal Wind Speed, PRE = Atmospheric Pressure
+        avg_temp = sol_data.get("AT", {}).get("av", "N/A")
+        avg_wind = sol_data.get("HWS", {}).get("av", "N/A")
+        avg_press = sol_data.get("PRE", {}).get("av", "N/A")
+        season = sol_data.get("Season", "N/A")
+        
+        # Format a tight, human-readable summary string for your LLM prompt
+        summary = (
+            f"Martian Sol: {latest_sol}, "
+            f"Season: {season}, "
+            f"Avg Temp: {avg_temp}°C, "
+            f"Avg Wind Speed: {avg_wind} m/s, "
+            f"Avg Pressure: {avg_press} Pa"
+        )
+        return summary
+    except Exception as e:
+        return f"Error parsing data: {str(e)}"
+
+
 #4-a. Predict Irrigation in MARS
 @app.get("/api/irrigation")
 def predict_irrigation():
     #5. Fetching Information from NASA's InSight MARS API
     resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
     resp.raise_for_status() 
+    raw_data = resp.json()
 
     #6. Storing those Information into the IBM Cloudant
     # Setting Up Authenticator with the IBm Cloud API Key
@@ -97,11 +128,15 @@ def predict_irrigation():
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     
-  
-    #9. Prompt: using a JSON and returning
-    prompt=f"""
-    You are a space scientist. So, could you please analyze the data {resp.json()} and predict the irrigation in Mars?
-    """
+    #9. Parsing the JSON Response
+    clean_weather_summary = extract_mars_weather(raw_data)
+
+    #10. Prompt: using a JSON and returning
+    prompt = f"""
+        You are a space scientist. Analyze the following actual Mars weather telemetry 
+        and predict irrigation viability inside an enclosed greenhouse system:
+        {clean_weather_summary}
+        """
     #Response from IBM WatsonX AI (granite-4-h-small) Model
     #res = model.generate(prompt=prompt)
 
@@ -110,9 +145,7 @@ def predict_irrigation():
     model="gpt-5",
     input= prompt
     )
-    print(res.output_text)
-    #print(res["results"][0]["generated_text"])
-    return res.output_text
+    return jsonify({"success": True, "prediction": res.output_text})
 
 #4-b. Predict Diseases in MARS
 @app.get("/api/disease")
@@ -143,7 +176,11 @@ def predict_disease():
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     
-    #9. Prompt: using a JSON and returning
+    #9. Parsing the JSON Response
+    tmp_res = resp.json()
+    irrigation_data = tmp_res["675"]["season"]
+    
+    #10. Prompt: using a JSON and returning
     prompt=f"""
     You are a space scientist. So, could you please analyze the data {resp.json()} and predict the diseases in Mars?
     """
