@@ -206,4 +206,6 @@ def predict_enery():
 
 # For Flask App Running Point 
 if __name__ == "__main__":
-  app.run(host="0.0.0.0", port=5000, debug=True)
+  # Bind to 0.0.0.0 and use the port provided by Render
+  port = int(os.environ.get("PORT", 5000))
+  app.run(host="0.0.0.0", port=port, debug=True)
