@@ -102,7 +102,7 @@ def extract_mars_data(raw_json):
 @app.get("/api/irrigation")
 def predict_irrigation():
     #6. Fetching Information from NASA's InSight MARS API
-    resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
+    resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0",timeout=10)
     resp.raise_for_status() 
     raw_data = resp.json()
 
@@ -132,10 +132,10 @@ def predict_irrigation():
         #Response from IBM WatsonX AI (granite-4-h-small) Model
         #res = model.generate(prompt=prompt)
 
-        #Response from OpenAI (gpt-5) Model
+        #Response from OpenAI (gpt-4o) Model
         res = openaiclient.responses.create(
-        model="gpt-5",
-        input= prompt
+        model="gpt-4o",
+        input = prompt
         )
         return res.output_text
     
@@ -149,7 +149,7 @@ def predict_irrigation():
 @app.get("/api/disease")
 def predict_disease():
     #6. Fetching Information from NASA's InSight MARS API
-    resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
+    resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0",timeout=10)
     resp.raise_for_status() 
     raw_data = resp.json()
 
@@ -179,10 +179,10 @@ def predict_disease():
         #Response from IBM WatsonX AI (granite-4-h-small) Model
         #res = model.generate(prompt=prompt)
 
-        #Response from OpenAI (gpt-5) Model
+        #Response from OpenAI (gpt-4o) Model
         res = openaiclient.responses.create(
-        model="gpt-5",
-        input= prompt
+        model="gpt-4o",
+        input = prompt
         )
         return res.output_text
     
@@ -196,7 +196,7 @@ def predict_disease():
 @app.get("/api/energy")
 def predict_enery():
     #6. Fetching Information from NASA's InSight MARS API
-    resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
+    resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0",timeout=10)
     resp.raise_for_status() 
     raw_data = resp.json()
 
@@ -226,9 +226,9 @@ def predict_enery():
         #Response from IBM WatsonX AI (granite-4-h-small) Model
         #res = model.generate(prompt=prompt)
 
-        #Response from OpenAI (gpt-5) Model
+        #Response from OpenAI (gpt-4o) Model
         res = openaiclient.responses.create(
-        model="gpt-5",
+        model="gpt-4o",
         input= prompt
         )
         return res.output_text
@@ -243,5 +243,5 @@ def predict_enery():
 if __name__ == "__main__":
   # Bind to 0.0.0.0 and use the port provided by Render
   port = int(os.environ.get("PORT", 5000))
-  #app.run(host="127.0.0.1", port=port, debug=True) #...For Local...#
-  app.run(host="0.0.0.0", port=port, debug=True) #...For Production...#
+  app.run(host="127.0.0.1", port=port, debug=True) #...For Local...#
+  #app.run(host="0.0.0.0", port=port, debug=True) #...For Production...#
