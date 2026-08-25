@@ -68,7 +68,8 @@ openaiclient = OpenAI()
 def home():
     return render_template('index.html')
 
-def extract_mars_weather(raw_json):
+#4. Parsing the JSON Response
+def extract_mars_data(raw_json):
     try:
         # Get the first available Sol ID (e.g., "675")
         sol_keys = [key for key in raw_json.keys() if key.isdigit()]
@@ -97,23 +98,22 @@ def extract_mars_weather(raw_json):
     except Exception as e:
         return f"Error parsing data: {str(e)}"
 
-
-#4-a. Predict Irrigation in MARS
+#5-a. Predict Irrigation in MARS
 @app.get("/api/irrigation")
 def predict_irrigation():
-    #5. Fetching Information from NASA's InSight MARS API
+    #6. Fetching Information from NASA's InSight MARS API
     resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
     resp.raise_for_status() 
     raw_data = resp.json()
 
-    #6. Storing those Information into the IBM Cloudant
+    #7. Storing those Information into the IBM Cloudant
     # Setting Up Authenticator with the IBm Cloud API Key
     authenticator = IAMAuthenticator(CLOUDANT_API_KEY)
     # Initializing the Cloudant Client with the Service URL 
     client = CloudantV1(authenticator=authenticator)
     client.set_service_url(CLOUDANT_SERVICE_URL)
 
-    #7. Inserting Documents in the Cloudant
+    #8. Inserting Documents in the Cloudant
     try:
         # This Generates an Unique Server-Side Document ID Automatically
         response = client.post_document(
@@ -121,47 +121,46 @@ def predict_irrigation():
                 document=resp.json()
             ).get_result()
         print("Success! Document inserted.")
-    
-    #8. Capturing the Exceptions
-    except ApiException as ae:
-        print(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-    
-    #9. Parsing the JSON Response
-    clean_weather_summary = extract_mars_weather(raw_data)
-
-    #10. Prompt: using a JSON and returning
-    prompt = f"""
+        #9. Calling the JSON Parser
+        mars_data = extract_mars_data(raw_data)
+        #10. Prompt: using a JSON and returning
+        prompt = f"""
         You are a space scientist. Analyze the following actual Mars weather telemetry 
         and predict irrigation viability inside an enclosed greenhouse system:
-        {clean_weather_summary}
+        {mars_data}
         """
-    #Response from IBM WatsonX AI (granite-4-h-small) Model
-    #res = model.generate(prompt=prompt)
+        #Response from IBM WatsonX AI (granite-4-h-small) Model
+        #res = model.generate(prompt=prompt)
 
-    #Response from OpenAI (gpt-5) Model
-    res = openaiclient.responses.create(
-    model="gpt-5",
-    input= prompt
-    )
-    return jsonify({"success": True, "prediction": res.output_text})
-
-#4-b. Predict Diseases in MARS
+        #Response from OpenAI (gpt-5) Model
+        res = openaiclient.responses.create(
+        model="gpt-5",
+        input= prompt
+        )
+        return res.output_text
+    
+    #11. Capturing the Exceptions
+    except ApiException as ae:
+        return(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
+    except Exception as e:
+        return(f"An unexpected error occurred: {e}")
+    
+#5-b. Predict Diseases in MARS
 @app.get("/api/disease")
 def predict_disease():
-    #5. Fetching Information from NASA's InSight MARS API
+    #6. Fetching Information from NASA's InSight MARS API
     resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
     resp.raise_for_status() 
+    raw_data = resp.json()
 
-    #6. Storing those Information into the IBM Cloudant
+    #7. Storing those Information into the IBM Cloudant
     # Setting Up Authenticator with the IBm Cloud API Key
     authenticator = IAMAuthenticator(CLOUDANT_API_KEY)
     # Initializing the Cloudant Client with the Service URL 
     client = CloudantV1(authenticator=authenticator)
     client.set_service_url(CLOUDANT_SERVICE_URL)
 
-    #7. Inserting Documents in the Cloudant
+    #8. Inserting Documents in the Cloudant
     try:
         # This Generates an Unique Server-Side Document ID Automatically
         response = client.post_document(
@@ -169,48 +168,46 @@ def predict_disease():
                 document=resp.json()
             ).get_result()
         print("Success! Document inserted.")
-    
-    #8. Capturing the Exceptions
-    except ApiException as ae:
-        print(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-    
-    #9. Parsing the JSON Response
-    tmp_res = resp.json()
-    irrigation_data = tmp_res["675"]["season"]
-    
-    #10. Prompt: using a JSON and returning
-    prompt=f"""
-    You are a space scientist. So, could you please analyze the data {resp.json()} and predict the diseases in Mars?
-    """
-    #Response from IBM WatsonX AI (granite-4-h-small) Model
-    #res = model.generate(prompt=prompt)
-    
-    #Response from OpenAI (gpt-5) Model
-    res = openaiclient.responses.create(
-    model="gpt-5",
-    input= prompt
-    )
-    print(res.output_text)
-    #print(res["results"][0]["generated_text"])
-    return res.output_text
+        #9. Calling the JSON Parser
+        mars_data = extract_mars_data(raw_data)
+        #10. Prompt: using a JSON and returning
+        prompt = f"""
+        You are a space scientist. Analyze the following actual Mars weather telemetry 
+        and predict disease viability inside an enclosed greenhouse system:
+        {mars_data}
+        """
+        #Response from IBM WatsonX AI (granite-4-h-small) Model
+        #res = model.generate(prompt=prompt)
 
-#4-c. Predict Energy Optimization in MARS
+        #Response from OpenAI (gpt-5) Model
+        res = openaiclient.responses.create(
+        model="gpt-5",
+        input= prompt
+        )
+        return res.output_text
+    
+    #11. Capturing the Exceptions
+    except ApiException as ae:
+        return(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
+    except Exception as e:
+        return(f"An unexpected error occurred: {e}")
+    
+#5-c. Predict Energy Optimization in MARS
 @app.get("/api/energy")
 def predict_enery():
-    #5. Fetching Information from NASA's InSight MARS API
+    #6. Fetching Information from NASA's InSight MARS API
     resp = requests.get("https://api.nasa.gov/insight_weather/?api_key="+NASA_API_KEY+"&feedtype=json&ver=1.0")
     resp.raise_for_status() 
+    raw_data = resp.json()
 
-    #6. Storing those Information into the IBM Cloudant
+    #7. Storing those Information into the IBM Cloudant
     # Setting Up Authenticator with the IBm Cloud API Key
     authenticator = IAMAuthenticator(CLOUDANT_API_KEY)
     # Initializing the Cloudant Client with the Service URL 
     client = CloudantV1(authenticator=authenticator)
     client.set_service_url(CLOUDANT_SERVICE_URL)
 
-    #7. Inserting Documents in the Cloudant
+    #8. Inserting Documents in the Cloudant
     try:
         # This Generates an Unique Server-Side Document ID Automatically
         response = client.post_document(
@@ -218,31 +215,33 @@ def predict_enery():
                 document=resp.json()
             ).get_result()
         print("Success! Document inserted.")
-    
-    #8. Capturing the Exceptions
-    except ApiException as ae:
-        print(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-    
-    #9. Prompt: using a JSON and returning
-    prompt=f"""
-    You are a space scientist. So, could you please analyze the data {resp.json()} and predict the energy optimization in Mars?
-    """
-    #Response from IBM's WatsonX AI (granite-4-h-small) Model
-    #res = model.generate(prompt=prompt)
-    
-    #Response from OpenAI (gpt-5) Model
-    res = openaiclient.responses.create(
-    model="gpt-5",
-    input= prompt
-    )
-    print(res.output_text)
-    #print(res["results"][0]["generated_text"])
-    return res.output_text
+        #9. Calling the JSON Parser
+        mars_data = extract_mars_data(raw_data)
+        #10. Prompt: using a JSON and returning
+        prompt = f"""
+        You are a space scientist. Analyze the following actual Mars weather telemetry 
+        and predict energy optimization viability inside an enclosed greenhouse system:
+        {mars_data}
+        """
+        #Response from IBM WatsonX AI (granite-4-h-small) Model
+        #res = model.generate(prompt=prompt)
 
+        #Response from OpenAI (gpt-5) Model
+        res = openaiclient.responses.create(
+        model="gpt-5",
+        input= prompt
+        )
+        return res.output_text
+    
+    #11. Capturing the Exceptions
+    except ApiException as ae:
+        return(f"IBM Cloudant API exception occurred: {ae.code} - {ae.message}")
+    except Exception as e:
+        return(f"An unexpected error occurred: {e}")
+    
 # For Flask App Running Point 
 if __name__ == "__main__":
   # Bind to 0.0.0.0 and use the port provided by Render
   port = int(os.environ.get("PORT", 5000))
-  app.run(host="0.0.0.0", port=port, debug=True)
+  #app.run(host="127.0.0.1", port=port, debug=True) #...For Local...#
+  app.run(host="0.0.0.0", port=port, debug=True) #...For Production...#

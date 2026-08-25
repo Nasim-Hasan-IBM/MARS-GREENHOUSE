@@ -205,7 +205,7 @@
       box.textContent = "Loading…";
 
       try{
-       const url = `${API_BASE}${endpoint}`; //...For Local..//
+       const url = `${API_BASE}${endpoint}`;
        const res = await fetch(url, {
           method: "GET",
           headers: { "Accept": "application/json, text/plain;q=0.9" },
