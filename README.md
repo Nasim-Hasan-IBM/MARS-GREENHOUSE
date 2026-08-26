@@ -56,6 +56,8 @@ Sense => Analyse => Decide => Report
 - **3. Integrated Development Environment (IDE):** IBM Bob 
 
 # Project's (MARS-GREENHOUSE) Folder Structure:
+
+```
 MARS-GREENHOUSE/
 ├── templates/
 │   └── index.html               # Frontend template referenced in Flask route '/'
@@ -64,6 +66,7 @@ MARS-GREENHOUSE/
 ├── README.md                    # Project documentation & architecture overview[cite: 3]
 ├── requirements.txt             # Project dependencies[cite: 4]
 └── Secrets.env                  # Environment variables & API credentials
+```
 
 # IBM Bob's Role:
 In this project, IBM's Bob played the role of an **Artificial Intelligence (AI) Assistant** to design, plan and implement the whole system by switching to the **Ask**, **Plan** and **Agent** modes respectively. The summary of Bob's role is mentioned below:
